@@ -259,7 +259,7 @@ describe('finance.js', function () {
         it("returns a random litecoin address", function(){
             var litecoinAddress = faker.finance.litecoinAddress();
 
-            assert.ok(litecoinAddress.match(/^[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}$/));
+          assert.ok(litecoinAddress.match(/^[LM3][1-9a-km-zA-HJ-NP-Z]{25,32}$/));
         });
     });
 
@@ -350,6 +350,17 @@ describe('finance.js', function () {
             var bban = iban.substring(4) + iban.substring(0, 4);
 
             assert.equal(ibanLib.mod97(ibanLib.toDigitString(bban)), 1, "the result should be equal to 1");
+        });
+        it("returns a specific and formally correct IBAN number", function () {
+            var iban = faker.finance.iban(false, "DE");
+            var bban = iban.substring(4) + iban.substring(0, 4);
+            var countryCode = iban.substring(0, 2);
+
+            assert.equal(countryCode, "DE");
+            assert.equal(ibanLib.mod97(ibanLib.toDigitString(bban)), 1, "the result should be equal to 1");
+        });
+        it("throws an error if the passed country code is not supported", function () {
+            assert.throws(function() { faker.finance.iban(false, 'AA');}, /Country code AA not supported/);
         });
     });
 

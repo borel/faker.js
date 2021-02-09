@@ -14,6 +14,15 @@ describe("internet.js", function () {
             assert.equal(res, 'Aiden.Harann55');
             faker.internet.userName.restore();
         });
+
+        it("returns an email with japanese characters", function () {
+            sinon.stub(faker.internet, 'userName').returns('思源_唐3');
+            var email = faker.internet.email("思源_唐3");
+            var res = email.split("@");
+            res = res[0];
+            assert.equal(res, '思源_唐3');
+            faker.internet.userName.restore();
+        });
     });
 
     describe("exampleEmail", function () {
@@ -125,6 +134,14 @@ describe("internet.js", function () {
         });
     });
 
+    describe('httpMethod()', function () {
+        it('returns a valid http method', function () {
+            var httpMethods = ['GET','POST', 'PUT', 'DELETE', 'PATCH'];
+            var method = faker.internet.httpMethod();
+            assert.ok(httpMethods.includes(method));
+        });
+    });
+
     describe('url()', function () {
         it('returns a valid url', function () {
             sinon.stub(faker.internet,'protocol').returns('http');
@@ -151,6 +168,14 @@ describe("internet.js", function () {
             var ip = faker.internet.ipv6();
             var parts = ip.split(':');
             assert.equal(parts.length, 8);
+        });
+    });
+
+    describe("port()", function () {
+        it("returns a random port number", function () {
+            var port = faker.internet.port();
+            assert.ok(Number.isInteger(port));
+            assert.ok(0 <= port && port <= 65535);
         });
     });
 
